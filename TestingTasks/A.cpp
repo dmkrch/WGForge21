@@ -1,11 +1,14 @@
 #include <iostream>
 #include <deque>
+#include <vector>
+
 
 class GroupInQueue {
 private:    
     int totalWaitingTime;
 
 public: 
+    GroupInQueue() : totalWaitingTime(0) {}
     GroupInQueue(int waitTime) : totalWaitingTime(waitTime) {}
     int GetWaitTime() { return totalWaitingTime; }
     void IncreaseWaitTime(int incTime) { totalWaitingTime += incTime; }
@@ -28,20 +31,20 @@ public:
 
 int main() {
     try {
-        std::deque<GroupInQueue> groupsInQueue;
-
         // n - amount of groups before Ada(including Ada)
         // m - amount of groups after Ada
         int n = 0;
         int m = 0;
         std::cin >> n >> m;
 
+        std::vector<GroupInQueue> groupsInQueue(n);
+
         // forming queue before Ada + Ada
         int t = 0;
         for (int i = 0; i < n; ++i) {
             std::cin >> t;
             GroupInQueue g{t};
-            groupsInQueue.push_back(t);
+            groupsInQueue[i] = g;
         }
 
         std::deque<Newcomer> newcomers;
