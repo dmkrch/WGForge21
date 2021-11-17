@@ -43,8 +43,7 @@ int main() {
         int t = 0;
         for (int i = 0; i < n; ++i) {
             std::cin >> t;
-            GroupInQueue g{t};
-            groupsInQueue[i] = g;
+            groupsInQueue[i].IncreaseWaitTime(t);
         }
 
         std::deque<Newcomer> newcomers;
