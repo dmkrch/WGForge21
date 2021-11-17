@@ -12,14 +12,14 @@ public:
 };
 
 
-class Newcomers {
+class Newcomer {
 private:
     int pos;
     int delayTime;
     int waitTime;
 
 public:
-    Newcomers(int p, int d, int t) : pos(p), delayTime(d), waitTime(t) {}
+    Newcomer(int p, int d, int t) : pos(p), delayTime(d), waitTime(t) {}
     int GetPos() { return pos; }
     int GetDelayTime() { return delayTime; }
     int GetWaitTime() { return waitTime; }
@@ -44,7 +44,7 @@ int main() {
             groupsInQueue.push_back(t);
         }
 
-        std::deque<Newcomers> newcomers;
+        std::deque<Newcomer> newcomers;
 
         int pos = 0;
         int delayTime = 0;
@@ -52,18 +52,36 @@ int main() {
         for (int i = 0; i < m; ++i) {
             std::cin >> pos >> delayTime >> waitTime;
 
-            Newcomers newcomer{pos, delayTime, waitTime};
-
-            // if (newcomer.GetDelayTime() > )
-            newcomers.push_back(newcomer);
-        }
-
-        // now main action
-        for (int i = 0; i < newcomers.size(); ++i) { // 
-            // skipping newcomers that stands in end of queue
-            if (newcomers[i].GetPos() == -1)
+            // if pos is end of queue - its useless to add element, it wont affect ada's waiting time
+            if (pos==-1)
                 continue;
 
+            Newcomer newcomer{pos, delayTime, waitTime};
+
+            // now we need to push new element so that array would be still sorted 
+            // by delayTime ascending
+
+            if (newcomers.size() == 0)
+                newcomers.push_back(newcomer);
+            else {
+                int j;
+                for (j = 0; j < newcomers.size(); ++j) {
+                    if (newcomer.GetDelayTime() < newcomers[j].GetDelayTime()) {
+                        std::deque<Newcomer>::iterator it = newcomers.begin();
+                        // than place newcomer after newcomer[i]
+                        it += j;
+                        newcomers.insert(it, newcomer);
+                        break;
+                    }
+                }
+
+                if (j == newcomers.size())
+                    newcomers.push_back(newcomer);
+            }
+        }
+
+        // now we need to place newcomers to queue
+        for (int i = 0; i < newcomers.size(); ++i) {
             // this is the time between Ada's coming and newcomer's coming to queue
             delayTime = newcomers[i].GetDelayTime();
 
@@ -85,13 +103,10 @@ int main() {
         // here we need to calculate waitTime of groups before Ada
         int adaWaitTime = 0;
 
-        for (int i = 0; i < n-1; ++i) {
+        for (int i = 0; i < n-1; ++i)
             adaWaitTime += groupsInQueue[i].GetWaitTime();
-        }
 
         std::cout << adaWaitTime;
-
-
 
         return 0;
     }
