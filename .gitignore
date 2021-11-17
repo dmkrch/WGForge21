@@ -1,0 +1,10 @@
+#files with no extension (exe files)
+*
+!/**/
+!*.*
+
+#objects files
+*.o
+
+#vscode
+.vscode/
