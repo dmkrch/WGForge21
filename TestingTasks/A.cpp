@@ -53,13 +53,45 @@ int main() {
             std::cin >> pos >> delayTime >> waitTime;
 
             Newcomers newcomer{pos, delayTime, waitTime};
+
+            // if (newcomer.GetDelayTime() > )
             newcomers.push_back(newcomer);
         }
 
-        // we have formed active groups in queue in 'groupsInQueue'
-        // and we formed newcomers in 'newcomers'
+        // now main action
+        for (int i = 0; i < newcomers.size(); ++i) { // 
+            // skipping newcomers that stands in end of queue
+            if (newcomers[i].GetPos() == -1)
+                continue;
 
-        
+            // this is the time between Ada's coming and newcomer's coming to queue
+            delayTime = newcomers[i].GetDelayTime();
+
+            // now we need to find position where to place newcomer in queue if necessary 
+            for (int j = 0; j < n-1; ++j) {
+                waitTime = groupsInQueue[j].GetWaitTime();
+                delayTime -= waitTime;
+
+                if (delayTime < 0) {
+                    // we found group that will be first newcomer
+                    // this means newcomer pos will be j + newcomer.GetPos()
+                    int newcomerIdInQueue = j + newcomers[i].GetPos();
+                    groupsInQueue[newcomerIdInQueue].IncreaseWaitTime(newcomers[i].GetWaitTime());
+                    break;
+                }
+            }
+        }
+
+        // here we need to calculate waitTime of groups before Ada
+        int adaWaitTime = 0;
+
+        for (int i = 0; i < n-1; ++i) {
+            adaWaitTime += groupsInQueue[i].GetWaitTime();
+        }
+
+        std::cout << adaWaitTime;
+
+
 
         return 0;
     }
