@@ -49,11 +49,11 @@ double GetAngleBetweenFlatnesses(Flatness& f1, Flatness& f2) {
 int GetPointArea(Point& p) {
     if (p.x>=0 && p.y<=0)
         return 1;
-    if (p.x<0 && p.y<0)
+    else if (p.x<0 && p.y<0)
         return 2;
-    if (p.x<=0 && p.y>0)
+    else if (p.x<=0 && p.y>=0)
         return 3;
-    if (p.x>0 && p.y>0)
+    else if (p.x>0 && p.y>0)
         return 4;
 }
 
@@ -69,8 +69,6 @@ double GetFixForAngleBetweenFlatnesses(Point& p) {
         return MY_PI;  
     case 4:
         return 3.0*MY_PI/2.0;
-    default:
-        return MY_PI;
     }
 }
 
@@ -119,6 +117,11 @@ int main() {
         // getting angle between f2, fy0
         double a1 = GetAngleBetweenFlatnesses(f1, fy0) + GetFixForAngleBetweenFlatnesses(p1);
         double a2 = GetAngleBetweenFlatnesses(f2, fy0) + GetFixForAngleBetweenFlatnesses(p2);
+
+        std::cout << a1 * 180 / MY_PI << std::endl;
+        std::cout << a2 * 180 / MY_PI << std::endl;
+
+        return 0;
 
         double da = fabs(a2-a1);
         if (da > MY_PI)
