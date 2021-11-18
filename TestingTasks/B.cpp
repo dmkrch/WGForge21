@@ -76,6 +76,10 @@ double GetFixForAngleBetweenFlatnesses(Point& p) {
 
 
 int main() {
+    std::cout << std::fixed;
+    std::cout << std::setprecision(8);
+
+
     double r = 0;
     double h = 0;
     std::cin >> r >> h;
@@ -96,7 +100,7 @@ int main() {
 
     if (p1.z==0 && p2.z==0) {
         double answer = sqrt((p2.x-p1.x)*(p2.x-p1.x) + (p2.y-p1.y)*(p2.y-p1.y) + (p2.z-p1.z)*(p2.z-p1.z));
-        std::cout << std::setprecision(8) << answer;
+        std::cout << answer;
     }
     else {
         // creating 2 flatnesses flatness{x,y,z 0,0,0, 0,0,h}
@@ -127,7 +131,7 @@ int main() {
         double dist2 = l * (1 - p2.z/h);
 
         double answer = sqrt(dist1*dist1 + dist2*dist2 - 2.0*dist1*dist2*cos(fi));
-        std::cout << std::setprecision(8) << answer;
+        std::cout << answer;
     }
 
     return 0;
