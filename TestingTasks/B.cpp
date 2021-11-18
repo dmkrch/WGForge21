@@ -47,14 +47,22 @@ double GetAngleBetweenFlatnesses(Flatness& f1, Flatness& f2) {
 }
 
 int GetPointArea(Point& p) {
-    if (p.x>=0 && p.y<=0)
+    if (p.x >= 0 && p.y == 0)
         return 1;
-    else if (p.x<0 && p.y<0)
-        return 2;
-    else if (p.x<=0 && p.y>=0)
+    else if (p.x <= 0 && p.y == 0)
         return 3;
-    else if (p.x>0 && p.y>0)
+    else if (p.x == 0 && p.y <= 0)
+        return 2;
+    else if (p.x == 0 && p.y >= 0)
+        return 3;
+    else if (p.x >= 0 && p.y >= 0)
         return 4;
+    else if (p.x >= 0 && p.y <= 0)
+        return 1;
+    else if (p.x <= 0 && p.y <= 0)
+        return 2;
+    else if (p.x <= 0 && p.y >= 0)
+        return 3;
 }
 
 double GetFixForAngleBetweenFlatnesses(Point& p) {
@@ -100,6 +108,10 @@ int main() {
         double answer = sqrt((p2.x-p1.x)*(p2.x-p1.x) + (p2.y-p1.y)*(p2.y-p1.y) + (p2.z-p1.z)*(p2.z-p1.z));
         std::cout << answer;
     }
+    else if ((p1.z==h && p2.z==0 && (p2.x==r || p2.y==r)) || (p2.z==h && p1.z==0 && (p1.x==r || p1.y==r))) {
+        // one of dots is on top of cone, second one is on base of cone
+        std::cout << sqrt(r*r+h*h);
+    }
     else {
         // creating 2 flatnesses flatness{x,y,z 0,0,0, 0,0,h}
 
@@ -117,11 +129,6 @@ int main() {
         // getting angle between f2, fy0
         double a1 = GetAngleBetweenFlatnesses(f1, fy0) + GetFixForAngleBetweenFlatnesses(p1);
         double a2 = GetAngleBetweenFlatnesses(f2, fy0) + GetFixForAngleBetweenFlatnesses(p2);
-
-        std::cout << a1 * 180 / MY_PI << std::endl;
-        std::cout << a2 * 180 / MY_PI << std::endl;
-
-        return 0;
 
         double da = fabs(a2-a1);
         if (da > MY_PI)
