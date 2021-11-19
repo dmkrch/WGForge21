@@ -34,10 +34,6 @@ void MakeFlatnessWithThreePoints(const Point& p1, const Point& p2, const Point& 
     f.D = -(x1 * (y2 * z3 - y3 * z2) + x2 * (y3 * z1 - y1 * z3) + x3 * (y1 * z2 - y2 * z1));
 }
 
-void PrintFlatness(Flatness& f) {
-    std::cout << f.A << "x + " << f.B << "y + " << f.C << "z + " << f.D << std::endl;
-}
-
 double GetAngleBetweenFlatnesses(Flatness& f1, Flatness& f2) {
     double cosA;
     cosA = fabs(f1.A*f2.A + f1.B*f2.B + f1.C*f2.C) /
@@ -103,14 +99,25 @@ int main() {
     // creating 0,0,0, and 0,0,h points
     Point p0 = {0.0, 0.0, 0.0};
     Point ph = {0.0, 0.0, static_cast<double>(h)};
+    
+    if ((p1.x == ph.x && p1.y == ph.y && p1.z == ph.z))
+    {
+        if (p2.x)
+            p1.x = p2.x * (-1);
+        if (p2.y)
+            p1.y = p2.y * (-1);
+    }
+    else if ((p2.x == ph.x && p2.y == ph.y && p2.z == ph.z))
+    {
+        if (p1.x)
+            p2.x = p1.x * (-1);
+        if (p1.y)
+            p2.y = p1.y * (-1);
+    }
 
     if (p1.z==0 && p2.z==0) {
         double answer = sqrt((p2.x-p1.x)*(p2.x-p1.x) + (p2.y-p1.y)*(p2.y-p1.y) + (p2.z-p1.z)*(p2.z-p1.z));
         std::cout << answer;
-    }
-    else if ((p1.z==h && p2.z==0 && (p2.x==r || p2.y==r)) || (p2.z==h && p1.z==0 && (p1.x==r || p1.y==r))) {
-        // one of dots is on top of cone, second one is on base of cone
-        std::cout << sqrt(r*r+h*h);
     }
     else {
         // creating 2 flatnesses flatness{x,y,z 0,0,0, 0,0,h}
